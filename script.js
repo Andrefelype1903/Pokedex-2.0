@@ -1,5 +1,11 @@
 const pokeConteiner = document.querySelector("#pokeConteiner");
 const pokemonCount = 250;
+
+const procurar = document.querySelector(".procurar");
+
+
+
+
 const colors = {
     fire: '#FDDFDF',
     grass: '#DEFDE0',
@@ -59,7 +65,23 @@ const createPokemonCard = (poke) => {
 
   card.innerHTML = pokemonInnerHTML;
   pokeConteiner.appendChild(card)
+
+  card.addEventListener('click', () => {
+    card.classList.toggle('active');
+});
 }
 
 
 fetchPokemons()
+
+pokeConteiner.addEventListener("click", (e) => {
+    const card = e.target.closest(".pokemon");
+    if (!card) return;
+
+    const nome = card.querySelector(".name").textContent;
+    const numero = card.querySelector(".number").textContent;
+
+    console.log("Clicou no Pokémon:", nome, numero);
+
+    card.style.transform
+});

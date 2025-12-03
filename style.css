@@ -18,6 +18,7 @@ body{
 
 .cabecalho {
     display: flex;
+    align-items: center;
     flex-direction: column;
     gap: 10px;
     padding: 10px;
@@ -28,8 +29,20 @@ h1{
 }
 
 .procurar {
-    padding: 5px;
-    border-radius: 10px;
+    background-image: url("https://cdn-icons-png.flaticon.com/512/622/622669.png");
+    background-size: 18px;
+    background-position: 10px center;
+    background-repeat: no-repeat;
+    padding-left: 40px; /* espaço para a lupa */
+    height: 35px;
+    border-radius: 8px;
+    border: 2px solid #ccc;
+    font-size: 16px;
+    outline: none;
+}
+
+.procurar:focus {
+    border-color: #888;
 }
 
 .pokeConteiner {
@@ -50,6 +63,12 @@ h1{
     text-align: center;
 }
 
+
+.pokemon:hover {
+    transform: scale(250%);
+}
+
+
 .imgConteiner {
     display: flex;
     align-items: center;
@@ -68,6 +87,7 @@ h1{
 .info {
     margin-top: 20px;
 }
+
 
 .number {
     background-color: rgba(0, 0, 0, 0.15);
