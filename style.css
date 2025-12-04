@@ -128,3 +128,8 @@ h1{
     z-index: 100;
 }
 
+@media screen and (max-width: 400px) {
+    .pokemon-modal-card {
+        transform: scale(2.0);
+    }
+}
