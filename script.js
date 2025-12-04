@@ -36,6 +36,7 @@ const getPokemons = async (id) => {
     const resp = await fetch(url);
     const data = await resp.json();
     createPokemonCard(data)
+    console.log(data)
 }
 
 const createPokemonCard = (poke) => {
@@ -66,9 +67,14 @@ const createPokemonCard = (poke) => {
   card.innerHTML = pokemonInnerHTML;
   pokeConteiner.appendChild(card)
 
-  card.addEventListener('click', () => {
-    card.classList.toggle('active');
-});
+//   card.addEventListener('click', () => {
+//     card.classList.toggle('active');
+// });
+
+    card.addEventListener('click', () => {
+        abrirModal(card);
+    });
+
 }
 
 
@@ -84,4 +90,27 @@ pokeConteiner.addEventListener("click", (e) => {
     console.log("Clicou no Pokémon:", nome, numero);
 
     card.style.transform
+});
+
+
+// Cria o fundo do modal
+const modalBg = document.createElement("div");
+modalBg.classList.add("pokemon-modal-bg");
+document.body.appendChild(modalBg);
+
+function abrirModal(card) {
+    const clone = card.cloneNode(true);
+    clone.classList.add("pokemon-modal-card");
+
+    modalBg.innerHTML = ""; 
+    modalBg.appendChild(clone);
+
+    modalBg.classList.add("active");
+}
+
+// Fechar ao clicar fora
+modalBg.addEventListener("click", (e) => {
+    if (e.target === modalBg) {
+        modalBg.classList.remove("active");
+    }
 });
