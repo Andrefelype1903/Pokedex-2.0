@@ -88,6 +88,16 @@ h1{
     margin-top: 20px;
 }
 
+.stats {
+    margin-top: 8px;
+    font-size: 8px;
+    line-height: 1.2;
+}
+
+.stats p {
+    margin: 2px 0;
+}
+
 
 .number {
     background-color: rgba(0, 0, 0, 0.15);
@@ -127,6 +137,46 @@ h1{
     transition: .3s ease;
     z-index: 100;
 }
+
+.stats {
+    margin-top: 8px;
+    font-size: 12px;
+}
+
+.stat-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 4px 0;
+}
+
+.stat-row span {
+    width: 28px;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+.stat-row .value {
+    width: 30px;
+    text-align: right;
+    font-weight: bold;
+}
+
+.bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(0,0,0,0.15);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.bar div {
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    border-radius: 3px;
+    transition: width .3s;
+}
+
 
 @media screen and (max-width: 400px) {
     .pokemon-modal-card {

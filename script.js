@@ -50,32 +50,65 @@ const createPokemonCard = (poke) => {
   const type = mainTypes.find(type => pokeTypes.indexOf(type) > -1);
   const color = colors[type];
 
+  const hp = poke.stats[0].base_stat;
+  const attack = poke.stats[1].base_stat;
+  const defense = poke.stats[2].base_stat;
+
   card.style.backgroundColor = color;
 
   const pokemonInnerHTML = `
     <div class="imgConteiner">
         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${poke.id}.png" alt="${name}">
     </div>
+
     <div class="info">
         <span class="number">${id}</span>
         <h3 class="name">${name}</h3>
         <small class="type">Type: <span>${type}</span></small>
+
+        <div class="stats">
+            <div class="stat-row">
+                <span>HP</span>
+                <div class="bar"><div style="width:${hp / 2}%"></div></div>
+                <span class="value">${hp}</span>
+            </div>
+
+            <div class="stat-row">
+                <span>ATK</span>
+                <div class="bar"><div style="width:${attack / 2}%"></div></div>
+                <span class="value">${attack}</span>
+            </div>
+
+            <div class="stat-row">
+                <span>DEF</span>
+                <div class="bar"><div style="width:${defense / 2}%"></div></div>
+                <span class="value">${defense}</span>
+            </div>
+        </div>
     </div>
-    </div>
-  `
+  `;
 
   card.innerHTML = pokemonInnerHTML;
-  pokeConteiner.appendChild(card)
+  pokeConteiner.appendChild(card);
 
-//   card.addEventListener('click', () => {
-//     card.classList.toggle('active');
-// });
+  card.addEventListener('click', () => abrirModal(card));
+};
 
-    card.addEventListener('click', () => {
-        abrirModal(card);
+procurar.addEventListener("input", () => {
+    const termo = procurar.value.toLowerCase();
+    const cards = document.querySelectorAll(".pokemon");
+
+    cards.forEach(card => {
+        const nome = card.querySelector(".name").textContent.toLowerCase();
+        const numero = card.querySelector(".number").textContent;
+
+        if (nome.includes(termo) || numero.includes(termo)) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
     });
-
-}
+});
 
 
 fetchPokemons()
