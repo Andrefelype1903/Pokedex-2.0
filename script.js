@@ -1,5 +1,5 @@
 const pokeConteiner = document.querySelector("#pokeConteiner");
-const pokemonCount = 250;
+const pokemonCount = 94;
 
 const procurar = document.querySelector(".procurar");
 
@@ -21,6 +21,27 @@ const colors = {
     flying: '#F5F5F5',
     fighting: '#E6E0D4',
     normal: '#F5F5F5'
+}
+
+const tipos = {
+    fire: 'Fogo',
+    grass: 'Grama',
+    electric: 'Elétrico',
+    water: 'Água',
+    ground: 'Chão',
+    rock: 'Pedra',
+    fairy: 'Fada',
+    poison: 'Venenoso',
+    bug: 'Inseto',
+    dragon: 'Dragão',
+    psychic: 'Pisíquico',
+    flying: 'Voador',
+    fighting: 'Lutador',
+    normal: 'Normal'
+}
+
+const traduzir = (palavra) => {
+  return tipos[palavra.toLowerCase()] || palavra;
 }
 
 const mainTypes = Object.keys(colors)
@@ -48,6 +69,7 @@ const createPokemonCard = (poke) => {
 
   const pokeTypes = poke.types.map(type => type.type.name);
   const type = mainTypes.find(type => pokeTypes.indexOf(type) > -1);
+  const tipos = traduzir(type)
   const color = colors[type];
 
   const hp = poke.stats[0].base_stat;
@@ -64,7 +86,7 @@ const createPokemonCard = (poke) => {
     <div class="info">
         <span class="number">${id}</span>
         <h3 class="name">${name}</h3>
-        <small class="type">Type: <span>${type}</span></small>
+        <small class="type">Tipo: <span>${tipos}</span></small>
 
         <div class="stats">
             <div class="stat-row">
@@ -101,15 +123,19 @@ procurar.addEventListener("input", () => {
     cards.forEach(card => {
         const nome = card.querySelector(".name").textContent.toLowerCase();
         const numero = card.querySelector(".number").textContent;
+        const tipo = card.querySelector(".type span").textContent.toLowerCase();
 
-        if (nome.includes(termo) || numero.includes(termo)) {
+        if (
+            nome.includes(termo) ||
+            numero.includes(termo) ||
+            tipo.includes(termo)
+        ) {
             card.style.display = "block";
         } else {
             card.style.display = "none";
         }
     });
 });
-
 
 fetchPokemons()
 
