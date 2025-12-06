@@ -3,12 +3,12 @@
     "short_name": "Pokedex 2.0",
     "icons": [
         {
-            "src": "../img/pokeball.png",
+            "src": "./img/pokeball.png",
             "sizes": "192x192"
         }
     ],
 
-    "start_url": "../index.html",
+    "start_url": "./index.html",
     "display": "standalone",
     "theme_color": "#ffffff",
     "backgroud_color": "#ffffff"
