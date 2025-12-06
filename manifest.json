@@ -4,13 +4,12 @@
     "icons": [
         {
             "src": "./img/pokeball.png",
-            "sizes": "192x192"
+            "sizes": "192x192",
+            "type": "image/png"
         }
     ],
-
     "start_url": "./index.html",
     "display": "standalone",
     "theme_color": "#ffffff",
-    "backgroud_color": "#ffffff"
-
+    "background_color": "#ffffff"
 }
