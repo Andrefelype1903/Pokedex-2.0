@@ -60,6 +60,8 @@ const getPokemons = async (id) => {
     console.log(data)
 }
 
+
+
 const createPokemonCard = (poke) => {
   const card = document.createElement('div');
   card.classList.add('pokemon');
