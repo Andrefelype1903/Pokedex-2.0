@@ -1,5 +1,5 @@
 const pokeConteiner = document.querySelector("#pokeConteiner");
-const pokemonCount = 94;
+const pokemonCount = 250;
 
 const procurar = document.querySelector(".procurar");
 
