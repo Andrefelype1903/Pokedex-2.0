@@ -60,6 +60,79 @@ const getPokemons = async (id) => {
     console.log(data)
 }
 
+async function carregarEvolucao(id, area2) {
+    try {
+        const speciesResp = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}/`);
+        const speciesData = await speciesResp.json();
+
+        const chainUrl = speciesData.evolution_chain.url;
+        const chainResp = await fetch(chainUrl);
+        const chainData = await chainResp.json();
+
+        const evolucoes = [];
+        let atual = chainData.chain;
+
+        while (atual) {
+            evolucoes.push(atual.species.name);
+            atual = atual.evolves_to[0];
+        }
+
+        area2.innerHTML = `
+            <div class="evo-wrapper">
+                <h3>Linha Evolutiva</h3>
+            </div>
+        `;
+
+        const wrapper = area2.querySelector(".evo-wrapper");
+
+        for (let i = 0; i < evolucoes.length; i++) {
+            const nome = evolucoes[i];
+            const resp = await fetch(`https://pokeapi.co/api/v2/pokemon/${nome}`);
+            const pokeData = await resp.json();
+
+            // --- seta entre evoluções ---
+            if (i > 0) {
+                const seta = document.createElement("div");
+                seta.classList.add("seta-evo");
+                wrapper.appendChild(seta);
+            }
+
+            const evoDiv = document.createElement("div");
+            evoDiv.classList.add("evo-div");
+
+            evoDiv.innerHTML = `
+                <img src="${pokeData.sprites.front_default}" width="80">
+                <span>${pokeData.name[0].toUpperCase() + pokeData.name.slice(1)}</span>
+            `;
+
+            wrapper.appendChild(evoDiv);
+        }
+
+        setTimeout(() => ajustarEvolucao(area2), 10);
+
+    } catch (e) {
+        console.error("Erro ao carregar evolução", e);
+        area2.innerHTML = "Linha evolutiva não encontrada.";
+    }
+}
+
+
+function ajustarEvolucao(area2) {
+    const evoWrapper = area2.querySelector(".evo-wrapper");
+    if (!evoWrapper) return;
+
+    // reseta o scale
+    evoWrapper.style.transform = "scale(1)";
+
+    const areaH = area2.clientHeight;
+    const conteudoH = evoWrapper.scrollHeight;
+
+    if (conteudoH > areaH) {
+        const scale = areaH / conteudoH;
+        evoWrapper.style.transform = `scale(${scale})`;
+    }
+}
+
 
 
 const createPokemonCard = (poke) => {
@@ -160,14 +233,79 @@ modalBg.classList.add("pokemon-modal-bg");
 document.body.appendChild(modalBg);
 
 function abrirModal(card) {
-    const clone = card.cloneNode(true);
-    clone.classList.add("pokemon-modal-card");
 
-    modalBg.innerHTML = ""; 
-    modalBg.appendChild(clone);
+    const pokeID = card.querySelector(".number").textContent; // ID já formatado 001
+    const idNum = parseInt(pokeID); // Converter para número normal
+
+    const container = document.createElement("div");
+    container.classList.add("carta-container");
+
+    const cloneFrente = card.cloneNode(true);
+    const verso = document.createElement("div");
+    
+
+
+    const area1 = document.createElement("div");
+    area1.classList.add("area1")
+    const area2 = document.createElement("div");
+    area2.classList.add("area2")
+
+    
+    
+    const numero = card.querySelector(".number").textContent; // pega o id do card
+
+
+    const area3 = document.createElement("div");
+    area3.classList.add("area3")
+
+
+     const imgHQ = document.createElement("img");
+    imgHQ.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${idNum}.png`;
+    imgHQ.classList.add("img-oficial");
+
+    area1.appendChild(imgHQ);
+
+    verso.appendChild(area1)
+    verso.appendChild(area2)
+    verso.appendChild(area3)
+
+
+
+    // Botão X
+    const virar = document.createElement("span");
+    virar.innerText = "x";
+    virar.classList.add("virar");
+    cloneFrente.appendChild(virar);
+
+    // Classes
+    cloneFrente.classList.add("pokemon-modal-card", "modal-frente");
+    verso.classList.add("pokemon-modal-card", "modal-verso");
+
+    // Limpa e insere temporariamente o container
+    modalBg.innerHTML = "";
+    modalBg.appendChild(container);
+    container.appendChild(cloneFrente);
+
+    // Medir a frente
+    const largura = cloneFrente.offsetWidth;
+    const altura = cloneFrente.offsetHeight;
+
+    // Aplicar tamanho no verso
+    verso.style.width = largura + "px";
+    verso.style.height = altura + "px";
+
+    // Colocar verso dentro do container
+    container.appendChild(verso);
 
     modalBg.classList.add("active");
+
+    virar.addEventListener("click", () => {
+        container.classList.add("active");
+        carregarEvolucao(idNum, area2);
+    });
 }
+
+
 
 // Fechar ao clicar fora
 modalBg.addEventListener("click", (e) => {
