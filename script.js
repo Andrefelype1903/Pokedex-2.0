@@ -155,7 +155,7 @@ function ajustarEvolucao(area2) {
     }
 }
 
-function ajustarArea3(area3) {
+/* function ajustarArea3(area3) {
     let scale = 1;
     const maxHeight = area3.clientHeight;
 
@@ -172,7 +172,7 @@ function ajustarArea3(area3) {
         if (scale < 0.50) break; // limite mínimo
         aplicarEscala();
     }
-}
+} */
 
 
 
@@ -318,12 +318,14 @@ async function carregarInfoPokemon(id, area3) {
 
     const tituloStats = document.createElement("h3");
     tituloStats.innerText = "Status:";
+    tituloStats.classList.add("titulo_stats")
     statsDiv.appendChild(tituloStats);
 
 
     pokeData.stats.forEach(s => {
         const linha = document.createElement("p");
-        linha.innerText = `${s.stat.name.toUpperCase()}: ${s.base_stat}`;
+        linha.innerText = `${s.stat.name.toUpperCase()}:${s.base_stat}`;
+        linha.classList.add("stats-poke")
         statsDiv.appendChild(linha);
     });
 
@@ -338,6 +340,7 @@ async function carregarInfoPokemon(id, area3) {
 
     const tituloCatch = document.createElement("h3");
     tituloCatch.innerText = "Chance de Captura";
+    tituloCatch.classList.add("titulo_stats")
     catchDiv.appendChild(tituloCatch);
 
     // Fórmula oficial: capture_rate / 255
@@ -345,6 +348,7 @@ async function carregarInfoPokemon(id, area3) {
 
     const linhaCatch = document.createElement("p");
     linhaCatch.innerText = `${chance.toFixed(1)}%`;
+    linhaCatch.classList.add("porcentagem")
     catchDiv.appendChild(linhaCatch);
 
 
@@ -405,12 +409,12 @@ function abrirModal(card) {
 
     const fraqTitulo = document.createElement("h4");
     fraqTitulo.textContent = "Fraquezas:";
-    fraqTitulo.classList.add("titulosFraqVant")
+    fraqTitulo.classList.add("titulo_stats")
     area3.appendChild(fraqTitulo);
 
     const fraqBox = document.createElement("div");
     fraqBox.style.display = "flex";
-    fraqBox.style.justifyContent = "rigth"
+    fraqBox.style.justifyContent = "center"
     fraqBox.style.flexWrap = "wrap";
     fraqBox.style.gap = "6px";
     area3.appendChild(fraqBox);
@@ -425,7 +429,7 @@ function abrirModal(card) {
 
     const vantTitulo = document.createElement("h4");
     vantTitulo.textContent = "Vantagens:";
-    vantTitulo.classList.add("titulosFraqVant")
+    vantTitulo.classList.add("titulo_stats")
     
     area3.appendChild(vantTitulo);
 
@@ -445,8 +449,6 @@ function abrirModal(card) {
 
 });
     }
-
-
 
 
     // Botão X
