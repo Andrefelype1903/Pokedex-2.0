@@ -37,7 +37,12 @@ const tipos = {
     psychic: 'Pisíquico',
     flying: 'Voador',
     fighting: 'Lutador',
-    normal: 'Normal'
+    normal: 'Normal',
+    ice: 'Gelo',
+    ghost: 'Fantasma',
+    dark: 'Escuridão',
+    steel: 'Metal'
+
 }
 
 
@@ -61,6 +66,35 @@ const typeIcons = {
     steel: "https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/steel.svg",
     fairy: "https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/fairy.svg"
 };
+
+async function getWeaknessesAndStrengths(id) {
+    const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
+    const resp = await fetch(url);
+    const data = await resp.json();
+
+    const types = data.types.map(t => t.type.url);
+
+    const weaknesses = new Set();
+    const strengths = new Set();
+
+    for (const t of types) {
+        const respType = await fetch(t);
+        const dataType = await respType.json();
+
+        // fraquezas (double_damage_from)
+        dataType.damage_relations.double_damage_from.forEach(w => weaknesses.add(w.name));
+
+        // vantagens (double_damage_to)
+        dataType.damage_relations.double_damage_to.forEach(s => strengths.add(s.name));
+    }
+
+    return {
+        weaknesses: Array.from(weaknesses),
+        strengths: Array.from(strengths)
+    };
+}
+
+
 
 const traduzir = (palavra) => {
   return tipos[palavra.toLowerCase()] || palavra;
@@ -154,27 +188,6 @@ function ajustarEvolucao(area2) {
         evoWrapper.style.transform = `scale(${scale})`;
     }
 }
-
-/* function ajustarArea3(area3) {
-    let scale = 1;
-    const maxHeight = area3.clientHeight;
-
-    const aplicarEscala = () => {
-        area3.style.transformOrigin = "top center";
-        area3.style.transform = `scale(${scale}) rotatey(180deg)`;
-    };
-
-    aplicarEscala();
-
-    // enquanto estiver maior, reduz a escala
-    while (area3.scrollHeight * scale > maxHeight) {
-        scale -= 0.05; // reduz 5%
-        if (scale < 0.50) break; // limite mínimo
-        aplicarEscala();
-    }
-} */
-
-
 
 
 const createPokemonCard = (poke) => {
@@ -270,32 +283,6 @@ pokeConteiner.addEventListener("click", (e) => {
 
 
 
-async function getWeaknessesAndStrengths(id) {
-    const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
-    const resp = await fetch(url);
-    const data = await resp.json();
-
-    const types = data.types.map(t => t.type.url);
-
-    const weaknesses = new Set();
-    const strengths = new Set();
-
-    for (const t of types) {
-        const respType = await fetch(t);
-        const dataType = await respType.json();
-
-        // fraquezas (double_damage_from)
-        dataType.damage_relations.double_damage_from.forEach(w => weaknesses.add(w.name));
-
-        // vantagens (double_damage_to)
-        dataType.damage_relations.double_damage_to.forEach(s => strengths.add(s.name));
-    }
-
-    return {
-        weaknesses: Array.from(weaknesses),
-        strengths: Array.from(strengths)
-    };
-}
 
 
 async function carregarInfoPokemon(id, area3) {
@@ -420,11 +407,29 @@ function abrirModal(card) {
     area3.appendChild(fraqBox);
 
     result.weaknesses.forEach(type => {
-        const img = document.createElement("img");
-        img.src = typeIcons[type];
-        img.style.width = "8px";
-        img.style.height = "8px";
-        fraqBox.appendChild(img);
+        const wrapper = document.createElement("div");
+    wrapper.style.display = "flex";
+    wrapper.style.flexDirection = "column";
+    wrapper.style.alignItems = "center";
+    wrapper.style.cursor = "pointer";
+
+    const img = document.createElement("img");
+    img.src = typeIcons[type];
+    img.style.width = "8px";
+    img.style.height = "8px";
+
+    const label = document.createElement("span");
+    label.classList.add("span-icon")
+    label.textContent = tipos[type];
+
+    wrapper.appendChild(img);
+    wrapper.appendChild(label);
+
+    wrapper.addEventListener("click", () => {
+        label.style.display = (label.style.display === "none") ? "block" : "none";
+    });
+
+    fraqBox.appendChild(wrapper);
     });
 
     const vantTitulo = document.createElement("h4");
@@ -436,15 +441,34 @@ function abrirModal(card) {
     const vantBox = document.createElement("div");
     vantBox.style.display = "flex";
     vantBox.style.flexWrap = "wrap";
+    vantBox.style.justifyContent = "center"
     vantBox.style.gap = "6px";
     area3.appendChild(vantBox);
 
     result.strengths.forEach(type => {
-        const img = document.createElement("img");
-        img.src = typeIcons[type];
-        img.style.width = "8px";
-        img.style.height = "8px";
-        vantBox.appendChild(img);
+        const wrapper = document.createElement("div");
+    wrapper.style.display = "flex";
+    wrapper.style.flexDirection = "column";
+    wrapper.style.alignItems = "center";
+    wrapper.style.cursor = "pointer";
+
+    const img = document.createElement("img");
+    img.src = typeIcons[type];
+    img.style.width = "8px";
+    img.style.height = "8px";
+
+    const label = document.createElement("span");
+    label.classList.add("span-icon")
+    label.textContent = tipos[type];
+
+    wrapper.appendChild(img);
+    wrapper.appendChild(label);
+
+    wrapper.addEventListener("click", () => {
+        label.style.display = (label.style.display === "none") ? "block" : "none";
+    });
+
+    vantBox.appendChild(wrapper);
     });
 
 });

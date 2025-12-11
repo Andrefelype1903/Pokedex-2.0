@@ -299,6 +299,12 @@ h1{
     height: 2px;
 }
 
+.span-icon {
+    display: none;
+    font-size: 0.4rem;
+    margin-top: 2px;
+}
+
 .titulosFraqVant {
     font-size: 0.5rem;
     margin-bottom: 1px;
