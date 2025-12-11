@@ -40,6 +40,28 @@ const tipos = {
     normal: 'Normal'
 }
 
+
+const typeIcons = {
+    normal: "https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/normal.svg",
+    fire: "https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/fire.svg",
+    water: "https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/water.svg",
+    electric: "https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/electric.svg",
+    grass: "https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/grass.svg",
+    ice: "https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/ice.svg",
+    fighting: "https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/fighting.svg",
+    poison: "https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/poison.svg",
+    ground: "https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/ground.svg",
+    flying: "https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/flying.svg",
+    psychic: "https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/psychic.svg",
+    bug: "https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/bug.svg",
+    rock: "https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/rock.svg",
+    ghost: "https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/ghost.svg",
+    dragon: "https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/dragon.svg",
+    dark: "https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/dark.svg",
+    steel: "https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/steel.svg",
+    fairy: "https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/fairy.svg"
+};
+
 const traduzir = (palavra) => {
   return tipos[palavra.toLowerCase()] || palavra;
 }
@@ -132,6 +154,26 @@ function ajustarEvolucao(area2) {
         evoWrapper.style.transform = `scale(${scale})`;
     }
 }
+
+function ajustarArea3(area3) {
+    let scale = 1;
+    const maxHeight = area3.clientHeight;
+
+    const aplicarEscala = () => {
+        area3.style.transformOrigin = "top center";
+        area3.style.transform = `scale(${scale}) rotatey(180deg)`;
+    };
+
+    aplicarEscala();
+
+    // enquanto estiver maior, reduz a escala
+    while (area3.scrollHeight * scale > maxHeight) {
+        scale -= 0.05; // reduz 5%
+        if (scale < 0.50) break; // limite mínimo
+        aplicarEscala();
+    }
+}
+
 
 
 
@@ -227,6 +269,94 @@ pokeConteiner.addEventListener("click", (e) => {
 });
 
 
+
+async function getWeaknessesAndStrengths(id) {
+    const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
+    const resp = await fetch(url);
+    const data = await resp.json();
+
+    const types = data.types.map(t => t.type.url);
+
+    const weaknesses = new Set();
+    const strengths = new Set();
+
+    for (const t of types) {
+        const respType = await fetch(t);
+        const dataType = await respType.json();
+
+        // fraquezas (double_damage_from)
+        dataType.damage_relations.double_damage_from.forEach(w => weaknesses.add(w.name));
+
+        // vantagens (double_damage_to)
+        dataType.damage_relations.double_damage_to.forEach(s => strengths.add(s.name));
+    }
+
+    return {
+        weaknesses: Array.from(weaknesses),
+        strengths: Array.from(strengths)
+    };
+}
+
+
+async function carregarInfoPokemon(id, area3) {
+
+    // 1. Buscar o pokemon principal (para stats)
+    const resp = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+    const pokeData = await resp.json();
+
+    // 2. Buscar species (chance de captura)
+    const speciesResp = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}`);
+    const speciesData = await speciesResp.json();
+
+
+    // -------------------------
+    //  STATS
+    // -------------------------
+    const statsDiv = document.createElement("div");
+    statsDiv.classList.add("stats-box");
+
+
+    const tituloStats = document.createElement("h3");
+    tituloStats.innerText = "Status:";
+    statsDiv.appendChild(tituloStats);
+
+
+    pokeData.stats.forEach(s => {
+        const linha = document.createElement("p");
+        linha.innerText = `${s.stat.name.toUpperCase()}: ${s.base_stat}`;
+        statsDiv.appendChild(linha);
+    });
+
+    tituloStats.classList.add("titulo-Stats")
+
+
+    // -------------------------
+    //  CHANCE DE CAPTURA
+    // -------------------------
+    const catchDiv = document.createElement("div");
+    catchDiv.classList.add("catch-box");
+
+    const tituloCatch = document.createElement("h3");
+    tituloCatch.innerText = "Chance de Captura";
+    catchDiv.appendChild(tituloCatch);
+
+    // Fórmula oficial: capture_rate / 255
+    const chance = (speciesData.capture_rate / 255) * 100;
+
+    const linhaCatch = document.createElement("p");
+    linhaCatch.innerText = `${chance.toFixed(1)}%`;
+    catchDiv.appendChild(linhaCatch);
+
+
+    // Inserir tudo na área3
+    area3.appendChild(statsDiv);
+    area3.appendChild(catchDiv);
+}
+
+
+
+
+
 // Cria o fundo do modal
 const modalBg = document.createElement("div");
 modalBg.classList.add("pokemon-modal-bg");
@@ -270,6 +400,54 @@ function abrirModal(card) {
     verso.appendChild(area3)
 
 
+    const FraqVant = () => {
+      getWeaknessesAndStrengths(idNum).then(result => {
+
+    const fraqTitulo = document.createElement("h4");
+    fraqTitulo.textContent = "Fraquezas:";
+    fraqTitulo.classList.add("titulosFraqVant")
+    area3.appendChild(fraqTitulo);
+
+    const fraqBox = document.createElement("div");
+    fraqBox.style.display = "flex";
+    fraqBox.style.justifyContent = "rigth"
+    fraqBox.style.flexWrap = "wrap";
+    fraqBox.style.gap = "6px";
+    area3.appendChild(fraqBox);
+
+    result.weaknesses.forEach(type => {
+        const img = document.createElement("img");
+        img.src = typeIcons[type];
+        img.style.width = "8px";
+        img.style.height = "8px";
+        fraqBox.appendChild(img);
+    });
+
+    const vantTitulo = document.createElement("h4");
+    vantTitulo.textContent = "Vantagens:";
+    vantTitulo.classList.add("titulosFraqVant")
+    
+    area3.appendChild(vantTitulo);
+
+    const vantBox = document.createElement("div");
+    vantBox.style.display = "flex";
+    vantBox.style.flexWrap = "wrap";
+    vantBox.style.gap = "6px";
+    area3.appendChild(vantBox);
+
+    result.strengths.forEach(type => {
+        const img = document.createElement("img");
+        img.src = typeIcons[type];
+        img.style.width = "8px";
+        img.style.height = "8px";
+        vantBox.appendChild(img);
+    });
+
+});
+    }
+
+
+
 
     // Botão X
     const virar = document.createElement("span");
@@ -302,6 +480,9 @@ function abrirModal(card) {
     virar.addEventListener("click", () => {
         container.classList.add("active");
         carregarEvolucao(idNum, area2);
+        FraqVant()
+        carregarInfoPokemon(idNum, area3);
+        setTimeout(() => ajustarArea3(area3), 50);
     });
 }
 
