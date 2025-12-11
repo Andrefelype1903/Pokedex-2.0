@@ -351,15 +351,3 @@ h1{
     transition: width .3s;
 }
 
-
-
-
-
-
-
-
-@media screen and (max-width: 400px) {
-    .pokemon-modal-card {
-        transform: scale(2.0);
-    }
-}
