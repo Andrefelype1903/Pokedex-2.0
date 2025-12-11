@@ -329,7 +329,15 @@ h1{
 } */
         
 .virar {
+
+    width: 10px;
+    height: 10px;
     cursor: pointer;
+}
+
+.virar svg {
+    width: 10px;
+    height: 10px;
 }
 
 .stats {
