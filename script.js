@@ -363,6 +363,16 @@ function abrirModal(card) {
 
     const cloneFrente = card.cloneNode(true);
     const verso = document.createElement("div");
+
+    const fecharFrente = document.createElement("span")
+    fecharFrente.innerText = "X"
+    fecharFrente.classList.add("btn-fechar")
+    cloneFrente.appendChild(fecharFrente)
+
+    const fecharVerso = document.createElement("span");
+    fecharVerso.innerText = "X"
+    fecharVerso.classList.add("btn-fechar-verso")
+    verso.appendChild(fecharVerso)
     
 
 
@@ -477,12 +487,12 @@ function abrirModal(card) {
 
     // Botão virar
     const virar = document.createElement("span");
-    virar.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-ccw-icon lucide-rotate-ccw"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>`;
+    virar.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-repeat-icon lucide-repeat"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>`;
     virar.classList.add("virar");
     cloneFrente.appendChild(virar);
 
     const virarVerso = document.createElement("span");
-    virarVerso.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-ccw-icon lucide-rotate-ccw"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>`;
+    virarVerso.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-repeat-icon lucide-repeat"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>`;
     virarVerso.classList.add("virarVerso");
     verso.appendChild(virarVerso);
     
@@ -518,16 +528,26 @@ function abrirModal(card) {
         FraqVant()
         carregarInfoPokemon(idNum, area3);
         virarVerso.style.display ="flex"
+        fecharVerso.style.display = "block"
     });
 
     virarVerso.addEventListener("click", () => {
-        container.classList.remove("active")
-        area2.style.display = "none"
-        area2.innerHTML = ""
-        area3.style.display = "none"
-        area3.innerHTML = ""
-        virarVerso.style.display = "none"
+        container.classList.remove("active");
+        area2.style.display = "none";
+        area2.innerHTML = "";
+        area3.style.display = "none";
+        area3.innerHTML = "";
+        virarVerso.style.display = "none";
+        fecharVerso.style.display = "none"
     });
+
+    fecharFrente.addEventListener("click", () => {
+      modalBg.classList.remove("active")
+    })
+
+    fecharVerso.addEventListener("click", () => {
+      modalBg.classList.remove("active")
+    })
 }
 
 
