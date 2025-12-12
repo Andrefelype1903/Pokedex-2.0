@@ -481,6 +481,13 @@ function abrirModal(card) {
     virar.classList.add("virar");
     cloneFrente.appendChild(virar);
 
+    const virarVerso = document.createElement("span");
+    virarVerso.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-ccw-icon lucide-rotate-ccw"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>`;
+    virarVerso.classList.add("virarVerso");
+    verso.appendChild(virarVerso);
+    
+
+
     // Classes
     cloneFrente.classList.add("pokemon-modal-card", "modal-frente");
     verso.classList.add("pokemon-modal-card", "modal-verso");
@@ -504,11 +511,22 @@ function abrirModal(card) {
     modalBg.classList.add("active");
 
     virar.addEventListener("click", () => {
+        area2.style.display = "flex"
+        area3.style.display = "flex"
         container.classList.add("active");
         carregarEvolucao(idNum, area2);
         FraqVant()
         carregarInfoPokemon(idNum, area3);
-        setTimeout(() => ajustarArea3(area3), 50);
+        virarVerso.style.display ="flex"
+    });
+
+    virarVerso.addEventListener("click", () => {
+        container.classList.remove("active")
+        area2.style.display = "none"
+        area2.innerHTML = ""
+        area3.style.display = "none"
+        area3.innerHTML = ""
+        virarVerso.style.display = "none"
     });
 }
 
