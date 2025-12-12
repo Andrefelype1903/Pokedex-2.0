@@ -63,12 +63,6 @@ h1{
     text-align: center;
 }
 
-
-/* .pokemon:hover {
-    transform: scale(150%);
-}
- */
-
 .imgConteiner {
     display: flex;
     align-items: center;
@@ -85,17 +79,39 @@ h1{
 }
 
 .info {
-    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 5px;
 }
 
 .stats {
-    margin-top: 8px;
+    margin-top: 4px;
     font-size: 8px;
     line-height: 1.2;
 }
 
 .stats p {
     margin: 2px 0;
+}
+
+
+.stat-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 4px 0;
+}
+
+.stat-row span {
+    width: 28px;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+.stat-row .value {
+    width: 30px;
+    text-align: right;
+    font-weight: bold;
 }
 
 
@@ -107,7 +123,7 @@ h1{
 }
 
 .name {
-    margin: 8px 0 7px;
+    margin: 2px 0 2px;
     letter-spacing: 1.5px;
 }
 
@@ -313,7 +329,7 @@ h1{
 
 .titulo_stats {
     color: red;
-    font-size: 0.7rem;
+    font-size: 0.5rem;
 }
 
 .stats-poke {
@@ -324,9 +340,9 @@ h1{
     font-size: 0.4rem;
 }
 
-/* .porcentagem {
-    color: red;
-} */
+.porcentagem {
+    font-size: 0.8rem;
+}
         
 .virar, .virarVerso {
 
@@ -374,29 +390,7 @@ h1{
     
 }
 
-.stats {
-    margin-top: 8px;
-    font-size: 12px;
-}
 
-.stat-row {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin: 4px 0;
-}
-
-.stat-row span {
-    width: 28px;
-    font-weight: bold;
-    font-size: 11px;
-}
-
-.stat-row .value {
-    width: 30px;
-    text-align: right;
-    font-weight: bold;
-}
 
 .bar {
     flex: 1;

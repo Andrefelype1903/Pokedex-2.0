@@ -198,8 +198,10 @@ const createPokemonCard = (poke) => {
   const id = poke.id.toString().padStart(3, '0');
 
   const pokeTypes = poke.types.map(type => type.type.name);
+  console.log(pokeTypes)
   const type = mainTypes.find(type => pokeTypes.indexOf(type) > -1);
-  const tipos = traduzir(type)
+  const tipo1 = traduzir(pokeTypes[0]);
+  const tipo2 = pokeTypes[1] ? traduzir(pokeTypes[1]) : null;
   const color = colors[type];
 
   const hp = poke.stats[0].base_stat;
@@ -216,7 +218,8 @@ const createPokemonCard = (poke) => {
     <div class="info">
         <span class="number">${id}</span>
         <h3 class="name">${name}</h3>
-        <small class="type">Tipo: <span>${tipos}</span></small>
+        <small class="type">Tipo: <span>${tipo1}</span></small>
+          ${tipo2 ? `<small class="type">Tipo: <span>${tipo2}</span></small>` : ""}
 
         <div class="stats">
             <div class="stat-row">
